@@ -107,3 +107,4 @@ searchInput.addEventListener('keyup', () => {
 // Panggil fungsi utama saat halaman dimuat
 fetchDataFromBPS();
 
+
