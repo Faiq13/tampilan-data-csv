@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dashboard Data Interaktif</title>
+    <title>Dashboard Data BPS</title>
     <link href="https://fonts.googleapis.com/css2?family=Lato:wght@400;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
 </head>
@@ -11,21 +11,21 @@
 
     <header>
         <div class="container">
-            <h1>Dashboard Statistik Sederhana</h1>
-            <p>Menyajikan data produk dalam format tabel</p>
+            <h1>Dashboard Data Ketenagakerjaan BPS</h1>
+            <p>Menyajikan data statistik resmi dari Badan Pusat Statistik</p>
         </div>
     </header>
 
     <main class="container">
         <div class="card">
-            <h2>Tabel 1. Data Stok dan Harga Produk</h2>
+            <h2>Tabel: Tingkat Pengangguran Terbuka (TPT) per Provinsi (%)</h2>
             
             <div class="search-wrapper">
-                <input type="text" id="searchInput" placeholder="Cari berdasarkan produk, kategori, dll...">
+                <input type="text" id="searchInput" placeholder="Cari nama provinsi...">
             </div>
             
-            <div id="csv-data-container">
-                <p id="loading-indicator">Memuat data dari server...</p>
+            <div id="data-container">
+                <p id="loading-indicator">Mengambil data dari API BPS...</p>
             </div>
         </div>
     </main>
