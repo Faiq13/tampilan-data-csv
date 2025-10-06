@@ -89,3 +89,33 @@ footer {
     font-size: 14px;
     margin-top: 30px;
 }
+
+/* Tambahkan kode ini ke bagian bawah file style.css Anda */
+/* ... (semua kode CSS dari sebelumnya tetap ada) ... */
+
+/* Style untuk Search Box */
+.search-wrapper {
+    margin-bottom: 20px;
+}
+
+#searchInput {
+    width: 100%;
+    padding: 10px 15px;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    font-size: 16px;
+    box-sizing: border-box; /* Agar padding tidak menambah lebar */
+}
+
+#searchInput:focus {
+    outline: none;
+    border-color: #0056b3;
+    box-shadow: 0 0 0 2px rgba(0, 86, 179, 0.2);
+}
+
+/* Style untuk Loading Indicator */
+#loading-indicator {
+    color: #888;
+    text-align: center;
+    padding: 40px;
+}
