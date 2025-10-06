@@ -89,16 +89,21 @@ function renderTable(data) {
     container.appendChild(table);
 }
 
-// Event listener untuk search input
+// Event listener untuk search input (SUDAH DIPERBAIKI)
 searchInput.addEventListener('keyup', () => {
     const searchTerm = searchInput.value.toLowerCase();
-    
+
+    // Perbaikan: Memfilter data berdasarkan properti 'Nama Provinsi'
     const filteredData = allData.filter(row => {
-        return row['Nama Provinsi'].toLowerCase().includes(searchTerm);
+        // Mengambil nilai provinsi, memastikan itu adalah string, lalu mengubah ke huruf kecil
+        const provinceName = String(row['Nama Provinsi'] || '').toLowerCase();
+        // Mengembalikan true jika nama provinsi mengandung kata yang dicari
+        return provinceName.includes(searchTerm);
     });
-    
+
     renderTable(filteredData);
 });
 
 // Panggil fungsi utama saat halaman dimuat
 fetchDataFromBPS();
+
