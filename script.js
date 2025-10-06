@@ -1,38 +1,31 @@
 // --- KONFIGURASI API BPS ---
-// GANTI DENGAN API KEY YANG ANDA DAPATKAN DARI WEBSITE BPS
-const apiKey = '021b9d58faa281194642d9d6bdae6362'; 
+const apiKey = '021b9d58faa281194642d9d6bdae6362'; // PASTIKAN API KEY ANDA SUDAH BENAR
+const idVariabel = '43';
+const domain = '0000';
+const tahunData = '2023';
+const periodeData = '2';
 
-// Konfigurasi untuk mengambil data Tingkat Pengangguran Terbuka (TPT)
-const idVariabel = '43'; // ID Variabel untuk TPT
-const domain = '0000';   // 0000 untuk data Nasional yang dirinci per provinsi
-const tahunData = '2023'; // Mengambil data terbaru tahun 2023
-const periodeData = '2';  // Kode untuk periode "Agustus"
-
-// Membuat URL API secara dinamis
 const bpsApiUrl = `https://webapi.bps.go.id/v1/api/list/model/data/lang/ind/domain/${domain}/var/${idVariabel}/key/${apiKey}/th/${tahunData}/turth/${periodeData}`;
 
-// Variabel global untuk menyimpan data
 let allData = [];
 let headers = ['Nama Provinsi', 'Nilai TPT (%)'];
 
-// Elemen-elemen penting dari HTML
 const searchInput = document.getElementById('searchInput');
 const container = document.getElementById('data-container');
 const loadingIndicator = document.getElementById('loading-indicator');
 
-/**
- * Fungsi utama untuk mengambil data dari API BPS
- */
 async function fetchDataFromBPS() {
     try {
         const response = await fetch(bpsApiUrl);
         const result = await response.json();
 
+        // DEBUG: Lihat data mentah dari API BPS
+        console.log('1. Data mentah dari API BPS:', result);
+
         if (result.status !== 'OK') {
             throw new Error(result['message-response']);
         }
-
-        // Memproses data dari format JSON BPS
+        
         const dataBPS = result.data[0];
         allData = dataBPS.vervar.map(item => {
             const provinceData = dataBPS.datacontent[item.val];
@@ -42,26 +35,23 @@ async function fetchDataFromBPS() {
             };
         });
 
+        // DEBUG: Lihat data setelah kita proses
+        console.log('2. Data setelah diproses menjadi tabel:', allData);
+
         renderTable(allData);
 
     } catch (error) {
-        console.error('Terjadi kesalahan:', error);
-        container.innerHTML = `<p style="color: red; text-align: center;">Gagal memuat data. Pesan Error: ${error.message}. <br>Pastikan API Key Anda sudah benar.</p>`;
+        console.error('Terjadi kesalahan fatal:', error);
+        container.innerHTML = `<p style="color: red; text-align: center;">Gagal memuat data. Pesan Error: ${error.message}. <br>Pastikan API Key Anda sudah benar dan cek Console (F12) untuk detail.</p>`;
     }
 }
 
-/**
- * Fungsi untuk me-render tabel ke dalam HTML
- * @param {Array<Object>} data - Array berisi objek data yang akan ditampilkan
- */
 function renderTable(data) {
     loadingIndicator.style.display = 'none';
-
     if (data.length === 0) {
-        container.innerHTML = '<p>Tidak ada data yang cocok dengan pencarian Anda.</p>';
+        container.innerHTML = '<p>Tidak ada data untuk ditampilkan.</p>';
         return;
     }
-
     const table = document.createElement('table');
     const thead = document.createElement('thead');
     const headerRow = document.createElement('tr');
@@ -72,7 +62,6 @@ function renderTable(data) {
     });
     thead.appendChild(headerRow);
     table.appendChild(thead);
-
     const tbody = document.createElement('tbody');
     data.forEach(rowDataObj => {
         const tr = document.createElement('tr');
@@ -84,7 +73,6 @@ function renderTable(data) {
         tbody.appendChild(tr);
     });
     table.appendChild(tbody);
-    
     container.innerHTML = ''; 
     container.appendChild(table);
 }
@@ -92,19 +80,19 @@ function renderTable(data) {
 // Event listener untuk search input (SUDAH DIPERBAIKI)
 searchInput.addEventListener('keyup', () => {
     const searchTerm = searchInput.value.toLowerCase();
+    
+    // DEBUG: Lihat kata yang sedang dicari
+    console.log('3. Mencari kata:', searchTerm);
 
-    // Perbaikan: Memfilter data berdasarkan properti 'Nama Provinsi'
     const filteredData = allData.filter(row => {
-        // Mengambil nilai provinsi, memastikan itu adalah string, lalu mengubah ke huruf kecil
         const provinceName = String(row['Nama Provinsi'] || '').toLowerCase();
-        // Mengembalikan true jika nama provinsi mengandung kata yang dicari
         return provinceName.includes(searchTerm);
     });
+    
+    // DEBUG: Lihat hasil setelah data difilter
+    console.log('4. Hasil data setelah difilter:', filteredData);
 
     renderTable(filteredData);
 });
 
-// Panggil fungsi utama saat halaman dimuat
 fetchDataFromBPS();
-
-
