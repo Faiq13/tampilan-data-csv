@@ -1,5 +1,5 @@
 // --- KONFIGURASI API BPS ---
-const apiKey = '021b9d58faa281194642d9d6bdae6362'; // PASTIKAN API KEY ANDA SUDAH BENAR
+const apiKey = 'a02519505109a8f59014b18953e9abbe'; // PASTIKAN API KEY ANDA SUDAH BENAR
 const idVariabel = '43';
 const domain = '0000';
 const tahunData = '2023';
@@ -96,5 +96,6 @@ searchInput.addEventListener('keyup', () => {
 });
 
 fetchDataFromBPS();
+
 
 
