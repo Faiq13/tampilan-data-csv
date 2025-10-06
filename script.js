@@ -96,3 +96,4 @@ searchInput.addEventListener('keyup', () => {
 });
 
 fetchDataFromBPS();
+
