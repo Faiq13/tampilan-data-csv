@@ -1,0 +1,91 @@
+/* Pengaturan Dasar dan Font */
+body {
+    font-family: 'Lato', sans-serif; /* Menggunakan font Lato */
+    margin: 0;
+    background-color: #f0f2f5; /* Latar belakang abu-abu muda seperti dashboard */
+    color: #333;
+}
+
+.container {
+    width: 90%;
+    max-width: 960px;
+    margin: 0 auto;
+    padding: 0 15px;
+}
+
+/* Header (Bagian Atas) */
+header {
+    background-color: #0056b3; /* Biru khas instansi pemerintah */
+    color: white;
+    padding: 20px 0;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+header h1 {
+    margin: 0;
+    font-size: 24px;
+}
+
+header p {
+    margin: 5px 0 0;
+    font-size: 14px;
+    opacity: 0.9;
+}
+
+/* Konten Utama */
+main {
+    padding: 30px 15px;
+}
+
+.card {
+    background-color: white;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.05);
+    padding: 25px;
+    overflow-x: auto; /* Agar tabel bisa di-scroll di layar kecil */
+}
+
+.card h2 {
+    margin-top: 0;
+    font-size: 18px;
+    color: #0056b3;
+    border-bottom: 2px solid #f0f2f5;
+    padding-bottom: 10px;
+    margin-bottom: 20px;
+}
+
+/* Tabel Data */
+table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+th, td {
+    padding: 12px 15px;
+    text-align: left;
+    border-bottom: 1px solid #e0e0e0; /* Garis abu-abu tipis antar baris */
+}
+
+thead tr {
+    background-color: #f7f9fc; /* Latar belakang header tabel yang sangat terang */
+}
+
+th {
+    color: #333;
+    font-weight: 700; /* Bold */
+    font-size: 14px;
+    text-transform: uppercase; /* Huruf kapital untuk header */
+}
+
+tbody tr:hover {
+    background-color: #f1f5f9; /* Efek hover yang lembut */
+}
+
+/* Footer (Bagian Bawah) */
+footer {
+    text-align: center;
+    padding: 20px 0;
+    color: #888;
+    font-size: 14px;
+    margin-top: 30px;
+}
