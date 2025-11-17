@@ -3,39 +3,676 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dashboard Data BPS</title>
-    <link href="https://fonts.googleapis.com/css2?family=Lato:wght@400;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="style.css">
-</head>
-<body>
+    <title>Portal Data Mahasiswa & Kegiatan Kampus</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        /* Menggunakan font Inter untuk tampilan profesional */
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap');
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f0f4f8; /* Warna latar belakang lebih dingin */
+        }
+        /* Style untuk transisi dan efek sederhana */
+        .section-content, .angkatan-content-wrapper {
+            display: none;
+            animation: slideIn 0.5s ease-in-out;
+        }
+        @keyframes slideIn {
+            from { opacity: 0; transform: translateY(15px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        /* Style khusus untuk tabel di mobile */
+        .responsive-table-container {
+            max-height: 400px; /* Batasi tinggi tabel agar bisa discroll */
+            overflow-x: auto;
+            overflow-y: auto;
+            -webkit-overflow-scrolling: touch;
+        }
+    </style>
+    <script>
+        // --- DATA MAHASISWA DARI EXCEL (CSV) ---
+        
+        // --- DATA ANGKATAN 1 (2024) ---
+        const csvDataMahasiswa2024 = `No,Nama Mahasiswa,Nomor Induk Mahasiswa,Tahun Lahir,Domisili
+1,AYUN FARICHAH KHONIARO,60124001,2005,Kab. Pekalongan
+2,SIFA AURAHMAN,60124002,2007,Kab. Pekalongan
+3,DAMAYANTI,60124003,2006,Kab. Pemalang
+4,YUNIAR ZAHRA WIYANI,60124004,2006,Kab. Pemalang
+5,RINA TISNA NURASIH,60124005,2006,Kab. Pemalang
+6,NABILA JUANNITA ENAS,60124006,2006,Kab. Pemalang
+7,DEVITA RIZQI MAULIDA,60124007,2006,Kota Pekalongan
+8,MOHAMMAD ROSYIQUL FA'IQ,60124008,2006,Kab. Pekalongan
+9,ANINDA RIZQI AMELIA,60124009,2006,Kota Pekalongan
+10,MAHESWARI PASA PUTRI SYAMSUDAR,60124010,2006,Kab. Pekalongan
+11,DIANDRA NIKENITA AZALIA ISLAMI,60124011,2006,Kab. Pekalongan
+12,MUHAMMAD RIF'AN,60124012,2006,Kota Pekalongan
+13,HASAN,60124013,2007,Kota Pekalongan
+14,ULUM HIDAYAH SURYANI,60124014,2006,Kota Pekalongan
+15,ICHA AYU ANGGITA,60124015,2006,Kab. Pekalongan
+16,KAIFA ROBBY,60124016,2007,Kab. Pekalongan
+17,NIRMA AYU SURYANINGTYAS,60124017,2005,Kab. Pekalongan
+18,KHOPSA CHANDA SYAPUTRI,60124018,2005,Kota Pekalongan
+19,MITA NUR ISTIYANI,60124019,2006,Kab. Batang
+20,ABDUL MUHYI,60124020,2006,Kab. Batang
+21,WILDAN KHARISMA JATI,60124022,2006,Kota Pekalongan
+22,SIFA SABRINA,60124023,2005,Kab. Pekalongan
+23,Daffa Oktavianuri Ramadhan,60124024,2006,Kota Pekalongan
+24,MUH. DHIA UL KHAQ,60124025,2005,Kab. Pekalongan
+25,MOHAMAD ROYAN RAMADANI,60124026,2005,Kota Depok
+26,FITRI AMELIA,60124027,2005,Kab. Batang
+27,MUHAMMAD ZAINUL KAMAL,60124028,2002,Kab. Pekalongan
+28,DERI SUDRAJAT,60124029,2005,Kab. Batang
+29,ABDUL MUHIS,60124030,2007,Kab. Pemalang
+30,DEVI MUSTIKA,60124031,2005,Kab. Pekalongan
+31,RIFA GUSTI PRADIPTA,60124032,2006,Kab. Batang
+32,ALFICO AGRA RASYA VALENTINO,60124033,2006,Kab. Batang
+33,LINA KHOTIMAH,60124034,2006,Kab. Pemalang
+34,AZZAHRA LAILATUN NAHDI,60124035,2005,Kab. Pekalongan
+35,ZIDAN REFFA PRATAMA,60124036,2007,Kab. Batang
+36,VERANDA ARDIYAN PUTRA PRATAMA,60124037,2006,Kab. Pekalongan
+37,MOHAMMAD AZRUR RIZQI,60124038,2005,Kab. Batang
+38,MUHAMMAD SYAHRIL ROMADHAN,60124039,2006,Kab. Pemalang
+39,AMALIA PUTRI SETYA ARYANA,60124040,2006,Kab. Pekalongan
+40,SELVALENTINA RISTA ANGGITA,60124041,2006,Kab. Pekalongan
+41,MUHAMMAD HILMI,60124042,2006,Kab. Pekalongan
+42,NABIL SURYA AL HAKIM,60124044,2005,Kab. Batang
+43,LINTANG MAYZHA SAFIRA,60124045,2006,Kab. Batang
+44,YUSUFI NOVIATI,60124046,2007,Kab. Pekalongan
+`;
 
-    <header>
-        <div class="container">
-            <h1>Dashboard Data Ketenagakerjaan BPS</h1>
-            <p>Menyajikan data statistik resmi dari Badan Pusat Statistik</p>
+        // --- DATA ANGKATAN 2 (2025) ---
+        const csvDataMahasiswa2025 = `No,Nama Mahasiswa,Nomor Induk Mahasiswa,Tahun Lahir,Domisili
+1,MUHAMMAD SHEVA NABEEL,60125001,2007,Kab. Bekasi
+2,ZAKARIA RAMADHAN AL MALIK,60125002,2006,Kab. Jepara
+3,TRI INDAH DEWI SEPTIANI,60125003,2007,Kab. Pekalongan
+4,NAELU RIZQIYAH,60125004,2007,Kab. Pemalang
+5,PUTRI MAHINTAN SARI,60125005,2007,Kab. Indramayu
+6,MUHAMAD RAFI MAULANA,60125006,2007,Kab. Pekalongan
+7,CAHYA PUTRI JELITA,60125007,2007,Kab. Pekalongan
+8,ACHMAD RIDWAN,60125008,2007,Kab. Pekalongan
+9,NAJWA AMALIA KHOIR,60125009,2007,Kota Pekalongan
+10,ALISHA ZULFA SALSABILA,60125010,2007,Kab. Pemalang
+11,GISELA ANASTACIA YASINTA ATIE,60125011,2007,Kab. Pekalongan
+12,MILANIA SHEVA ANDINI AGUSTIN,60125012,2007,Kab. Pemalang
+13,ZASKIYAH SOFARINA,60125013,2007,Kota Pekalongan
+14,AHMAD ALIMIN,60125014,2006,Kab. Pekalongan
+15,ELGIN PANDYA ADINATA,60125015,2007,Kab. Pekalongan
+16,TALITHA FALAKH TASYA,60125016,2007,Kab. Pekalongan
+17,MELDA DWI SUSANTI,60125017,2007,Kab. Pemalang
+18,FARAH AMALIA,60125018,2007,Kab. Pemalang
+19,MUHAMMAD KHOIRIL MAROM,60125019,2006,Kab. Pekalongan
+20,ALFIATURROHMANIAH,60125020,2007,Kab. Pemalang
+21,THUFAILA,60125021,2006,Kota Pekalongan
+22,NUR RISKIANA,60125022,2007,Kab. Pekalongan
+23,CHAIRUL MUSTAKIM,60125023,2007,Kota Pekalongan
+24,RIZKI AMALIA,60125024,2007,Kab. Pemalang
+25,NAFI MAULA ARZA,60125025,2006,Kab. Pekalongan
+26,DINA NUR VIDIANA,60125026,2006,Kab. Pekalongan
+27,ZAHRA KHOIRUNISA,60125027,2006,Kota Pekalongan
+28,REVANI ZAHRA AFIFAH,60125028,2007,Kab. Pekalongan
+29,LINA AZARIA,60125029,2007,Kota Pekalongan
+30,PUTIK ALIFAMARZA,60125030,2008,Kab. Pekalongan
+31,FATHIYYATUR RIZQI,60125031,2007,Kab. Pekalongan
+32,AHMAD RIZZA PAHLEVI,60125032,2007,Kab. Pekalongan
+33,MUHAMMAD ZAIN,60125033,2006,Luar Negeri
+34,M. SYAHFATUR DWI LEKSONO,60125034,2006,Kab. Tegal
+35,ILHAM DWIJOKANGKO,60125035,2007,Kab. Batang
+36,DARA AMALIA AZZAHRAH,60125036,2007,Kota Pekalongan
+37,ERSA FARDA AVINA,60125037,2007,Kab. Pekalongan
+38,FARKHAN YAZID AGHNIYA,60125038,2007,Kab. Pemalang
+39,MUHAMAD TEGAR PAMUNGKAS WIRA KUSUMA,60125039,2007,Kota Pekalongan
+40,SHAFA AZZAHRA,60125040,2007,Kab. Pekalongan
+41,RAMA PUTRA TAMA,60125041,2007,Kab. Pekalongan
+42,NA'ILLATUL NABILA,60125042,2007,Kab. Pekalongan
+43,NOVA AGHNIA ZAHRA,60125043,2006,Kota Pekalongan
+44,DYLAN PERMANA PUTRA,60125044,2005,Kota Pekalongan
+45,DEVON ZUBAIR HELNANTO PUTRA,60125045,2007,Kab. Pemalang
+46,ANDHI AHMAT TAUHIT,60125046,2007,Kab. Pekalongan
+47,MUHAMAD RAFI PRADANA,60125047,2007,Kab. Pemalang
+48,AYYUB AL IDRUS,60125048,2007,Kab. Pekalongan
+49,FIKA ZULFIANI,60125049,2007,Kab. Pemalang
+50,BINTAN KAMILA,60125050,2007,Kab. Pekalongan
+51,NAILA ATHAYA AHMAD,60125051,2006,Kota Pekalongan
+52,FILDZAH IZZATI,60125052,2007,Kab. Batang
+53,M. ABYAN NUHA,60125053,2006,Kota Pekalongan
+54,HARUN IBRAHIM ABDALLAH MOHAMMAD,60125054,2004,Luar Negeri
+55,ALIYU IBRAHIM AHMAD,60125055,2005,Luar Negeri
+56,MUHAMMAD JIHADIL BARRAN,60125056,2007,Kab. Batang
+57,ANAS ROYAN SAMUDRA,60125057,2007,Kab. Pekalongan
+58,ACHMAD PAUZAN,60125058,2007,Kab. Cirebon
+59,ATHA HARSHAVARDHANA,60125059,2007,Kota Pekalongan
+60,MUHAMMAD ILHAM FARID,60125060,2007,Kab. Pekalongan
+61,MUHAMMAD EFENDI,60125061,2004,Kab. Pemalang
+62,NUKMAN ZADI,60125062,2007,Kota Pekalongan
+63,MOHAMAD FARREL CHIZAM,60125063,2007,Kab. Pekalongan
+64,TRI MARINES CRISTANTI,60125064,2005,Kab. Pekalongan
+65,ELSA ELYSIA,60125065,2006,Kab. Pekalongan
+66,YUNITA ROZANA FALAH,60125066,2004,Kab. Pekalongan
+`;
+        
+        // --- Modifikasi Warna Tema ke Indigo dan Amber (DIPERTAHANKAN) ---
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'primary-indigo': '#4338ca', /* Indigo 700 */
+                        'primary-dark': '#1e293b', /* Slate 800 */
+                        'accent-amber': '#f59e0b', /* Amber 500 */
+                    }
+                }
+            }
+        }
+
+        /**
+         * Fungsi untuk mem-parsing string CSV menjadi array of objects.
+         */
+        function parseCSV(csv) {
+            const lines = csv.trim().split('\n');
+            if (lines.length === 0) return [];
+            
+            const headers = lines[0].split(',').map(h => h.trim());
+            const data = [];
+
+            for (let i = 1; i < lines.length; i++) {
+                const line = lines[i].trim();
+                if (!line) continue;
+                
+                const values = line.match(/(?:"[^"]*"|[^,])+/g) || [];
+                
+                const entry = {};
+                if (values.length === headers.length) {
+                    for (let j = 0; j < headers.length; j++) {
+                        entry[headers[j]] = values[j].trim().replace(/^[\s\uFEFF\xA0]+|[\s\uFEFF\xA0]+$/g, '');
+                    }
+                    data.push(entry);
+                }
+            }
+            return data;
+        }
+
+        /**
+         * Fungsi untuk merender data mahasiswa (ANGKATAN 1) ke dalam tabel HTML.
+         */
+        function renderMahasiswaData() {
+            const data = parseCSV(csvDataMahasiswa2024);
+            const container = document.getElementById('angkatan-1-detail-data');
+            const countContainer = document.getElementById('angkatan-1-count');
+            
+            if (countContainer) {
+                countContainer.innerText = data.length + " Orang";
+            }
+            if (!container) return;
+
+            let tableHTML = `
+            <div class="responsive-table-container">
+                <table class="min-w-full divide-y divide-gray-200">
+                    <thead class="bg-primary-indigo sticky top-0 shadow-lg">
+                        <tr>
+                            <th scope="col" class="px-3 py-2 text-left text-xs font-medium text-white uppercase tracking-wider">No</th>
+                            <th scope="col" class="px-6 py-2 text-left text-xs font-medium text-white uppercase tracking-wider">Nama Mahasiswa</th>
+                            <th scope="col" class="px-6 py-2 text-left text-xs font-medium text-white uppercase tracking-wider">NIM</th>
+                            <th scope="col" class="px-6 py-2 text-left text-xs font-medium text-white uppercase tracking-wider">Domisili</th>
+                        </tr>
+                    </thead>
+                    <tbody id="table-body-2024" class="bg-white divide-y divide-gray-200">
+            `;
+
+            data.forEach((mhs, index) => {
+                const rowClass = index % 2 === 0 ? 'bg-white' : 'bg-indigo-50';
+                tableHTML += `
+                    <tr class="${rowClass}">
+                        <td class="px-3 py-3 whitespace-nowrap text-sm font-medium text-gray-900">${mhs['No']}</td>
+                        <td class="px-6 py-3 whitespace-nowrap text-sm text-gray-800 font-medium">${mhs['Nama Mahasiswa']}</td>
+                        <td class="px-6 py-3 whitespace-nowrap text-sm text-primary-indigo">${mhs['Nomor Induk Mahasiswa']}</td>
+                        <td class="px-6 py-3 whitespace-nowrap text-sm text-gray-500">${mhs['Domisili']}</td>
+                    </tr>
+                `;
+            });
+
+            tableHTML += `
+                    </tbody>
+                </table>
+            </div>
+            `;
+            
+            container.innerHTML = tableHTML;
+        }
+
+        /**
+         * Fungsi untuk merender data mahasiswa (ANGKATAN 2) ke dalam tabel HTML.
+         */
+        function renderMahasiswaData2025() {
+            const data = parseCSV(csvDataMahasiswa2025);
+            const container = document.getElementById('angkatan-2-detail-data');
+            const countContainer = document.getElementById('angkatan-2-count');
+
+            if (countContainer) {
+                countContainer.innerText = data.length + " Orang";
+            }
+            if (!container) return;
+
+            let tableHTML = `
+            <div class="responsive-table-container">
+                <table class="min-w-full divide-y divide-gray-200">
+                    <thead class="bg-primary-dark sticky top-0 shadow-lg">
+                        <tr>
+                            <th scope="col" class="px-3 py-2 text-left text-xs font-medium text-white uppercase tracking-wider">No</th>
+                            <th scope="col" class="px-6 py-2 text-left text-xs font-medium text-white uppercase tracking-wider">Nama Mahasiswa</th>
+                            <th scope="col" class="px-6 py-2 text-left text-xs font-medium text-white uppercase tracking-wider">NIM</th>
+                            <th scope="col" class="px-6 py-2 text-left text-xs font-medium text-white uppercase tracking-wider">Domisili</th>
+                        </tr>
+                    </thead>
+                    <tbody id="table-body-2025" class="bg-white divide-y divide-gray-200">
+            `;
+
+            data.forEach((mhs, index) => {
+                const rowClass = index % 2 === 0 ? 'bg-white' : 'bg-gray-50'; // Warna sedikit beda
+                tableHTML += `
+                    <tr class="${rowClass}">
+                        <td class="px-3 py-3 whitespace-nowrap text-sm font-medium text-gray-900">${mhs['No']}</td>
+                        <td class="px-6 py-3 whitespace-nowrap text-sm text-gray-800 font-medium">${mhs['Nama Mahasiswa']}</td>
+                        <td class="px-6 py-3 whitespace-nowrap text-sm text-primary-dark">${mhs['Nomor Induk Mahasiswa']}</td>
+                        <td class="px-6 py-3 whitespace-nowrap text-sm text-gray-500">${mhs['Domisili']}</td>
+                    </tr>
+                `;
+            });
+
+            tableHTML += `
+                    </tbody>
+                </table>
+            </div>
+            `;
+            
+            container.innerHTML = tableHTML;
+        }
+
+
+        // --- JavaScript untuk Navigasi (SPA Sederhana) ---
+        
+        /**
+         * Fungsi untuk menampilkan bagian (section) yang dipilih.
+         */
+        function showSection(sectionId) {
+            document.querySelectorAll('.section-content').forEach(section => {
+                section.style.display = 'none';
+            });
+
+            const activeSection = document.getElementById(sectionId);
+            if (activeSection) {
+                activeSection.style.display = 'block';
+                
+                // Panggil fungsi render data jika bagian mahasiswa aktif
+                if (sectionId === 'mahasiswa') {
+                    // Render data di latar belakang (jika belum)
+                    renderMahasiswaData();
+                    renderMahasiswaData2025(); 
+                    // Data tetap tersembunyi karena wrapper-nya display:none
+                }
+            }
+
+            document.querySelectorAll('.nav-link').forEach(link => {
+                link.classList.remove('bg-primary-indigo', 'text-white', 'shadow-md', 'border-b-4', 'border-accent-amber');
+                link.classList.add('text-gray-600', 'hover:bg-indigo-50', 'hover:text-primary-indigo');
+            });
+
+            const activeLink = document.querySelector(`.nav-link[href="#${sectionId}"]`);
+            if (activeLink) {
+                activeLink.classList.add('bg-primary-indigo', 'text-white', 'shadow-md', 'border-b-4', 'border-accent-amber');
+                activeLink.classList.remove('text-gray-600', 'hover:bg-indigo-50', 'hover:text-primary-indigo');
+            }
+
+            const mobileMenu = document.getElementById('mobile-menu');
+            if (mobileMenu && !mobileMenu.classList.contains('hidden')) {
+                mobileMenu.classList.add('hidden');
+            }
+        }
+
+        /**
+         * Memuat bagian yang sesuai saat halaman dimuat atau hash berubah.
+         */
+        window.onload = function() {
+            document.querySelectorAll('.nav-link').forEach(link => {
+                link.addEventListener('click', () => {
+                    const sectionId = link.getAttribute('href').substring(1);
+                    showSection(sectionId);
+                });
+            });
+
+            const hash = window.location.hash ? window.location.hash.substring(1) : 'beranda';
+            showSection(hash);
+
+            window.addEventListener('hashchange', () => {
+                const newHash = window.location.hash ? window.location.hash.substring(1) : 'beranda';
+                showSection(newHash);
+            });
+            
+            if (hash === 'mahasiswa') {
+                renderMahasiswaData();
+                renderMahasiswaData2025();
+            }
+
+            // --- EVENT LISTENER BARU UNTUK SEARCH ---
+            const searchInput = document.getElementById('mahasiswa-search-input');
+            if (searchInput) {
+                searchInput.addEventListener('keyup', filterTable);
+            }
+        }
+
+        /**
+         * Toggle tampilan menu mobile
+         */
+        function toggleMobileMenu() {
+            const menu = document.getElementById('mobile-menu');
+            menu.classList.toggle('hidden');
+        }
+
+        // --- FUNGSI BARU UNTUK IDE PENGGUNA ---
+
+        /**
+         * Menampilkan data angkatan yang dipilih (2024 atau 2025)
+         */
+        function showAngkatan(year) {
+            const wrapper2024 = document.getElementById('angkatan-2024-content');
+            const wrapper2025 = document.getElementById('angkatan-2025-content');
+            const btn2024 = document.getElementById('btn-angkatan-2024');
+            const btn2025 = document.getElementById('btn-angkatan-2025');
+            const searchInput = document.getElementById('mahasiswa-search-input');
+            const placeholder = document.getElementById('mahasiswa-placeholder');
+
+            // Sembunyikan placeholder
+            if (placeholder) placeholder.style.display = 'none';
+
+            if (year === 2024) {
+                wrapper2024.style.display = 'block';
+                wrapper2025.style.display = 'none';
+                // Style tombol aktif
+                btn2024.classList.add('bg-primary-indigo', 'text-white');
+                btn2024.classList.remove('bg-gray-200', 'text-gray-700');
+                // Style tombol non-aktif
+                btn2025.classList.add('bg-gray-200', 'text-gray-700');
+                btn2025.classList.remove('bg-primary-dark', 'text-white');
+            } else if (year === 2025) {
+                wrapper2024.style.display = 'none';
+                wrapper2025.style.display = 'block';
+                // Style tombol aktif
+                btn2025.classList.add('bg-primary-dark', 'text-white');
+                btn2025.classList.remove('bg-gray-200', 'text-gray-700');
+                // Style tombol non-aktif
+                btn2024.classList.add('bg-gray-200', 'text-gray-700');
+                btn2024.classList.remove('bg-primary-indigo', 'text-white');
+            }
+
+            // Reset pencarian setiap kali berganti tab
+            if (searchInput) searchInput.value = "";
+            filterTable(); // Jalankan filter untuk mereset tampilan (menampilkan semua)
+        }
+
+        /**
+         * Memfilter tabel yang sedang aktif berdasarkan input pencarian
+         */
+        function filterTable() {
+            const searchInput = document.getElementById('mahasiswa-search-input');
+            const query = searchInput.value.toLowerCase();
+
+            // Cari tahu tabel mana yang sedang aktif
+            let activeTableBody = null;
+            if (document.getElementById('angkatan-2024-content').style.display === 'block') {
+                activeTableBody = document.getElementById('table-body-2024');
+            } else if (document.getElementById('angkatan-2025-content').style.display === 'block') {
+                activeTableBody = document.getElementById('table-body-2025');
+            }
+
+            if (!activeTableBody) return; // Keluar jika tidak ada tabel yang aktif
+
+            const rows = activeTableBody.getElementsByTagName('tr');
+
+            // Loop melalui semua baris tabel
+            for (let i = 0; i < rows.length; i++) {
+                const nameCell = rows[i].getElementsByTagName('td')[1]; // Kolom ke-2 (index 1) adalah Nama
+                if (nameCell) {
+                    const name = nameCell.textContent || nameCell.innerText;
+                    if (name.toLowerCase().includes(query)) {
+                        rows[i].style.display = ""; // Tampilkan jika cocok
+                    } else {
+                        rows[i].style.display = "none"; // Sembunyikan jika tidak cocok
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+<body class="min-h-screen">
+
+    <header class="bg-white shadow-xl sticky top-0 z-10 border-t-4 border-primary-indigo">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-20">
+                <a href="#beranda" class="flex-shrink-0 text-3xl font-extrabold text-primary-dark tracking-tight">
+                    <span class="text-accent-amber">Maha</span>Data
+                </a>
+                <nav class="hidden md:block">
+                    <div class="flex space-x-2 p-1 bg-gray-100 rounded-xl shadow-inner">
+                        <a href="#beranda" class="nav-link px-4 py-2 rounded-lg text-sm transition duration-200 ease-in-out font-medium">Beranda</a>
+                        <a href="#mahasiswa" class="nav-link px-4 py-2 rounded-lg text-sm transition duration-200 ease-in-out font-medium">Data Mahasiswa</a>
+                        <a href="#kegiatan" class="nav-link px-4 py-2 rounded-lg text-sm transition duration-200 ease-in-out font-medium">Kegiatan Kampus</a>
+                        <a href="#tentangkami" class="nav-link px-4 py-2 rounded-lg text-sm transition duration-200 ease-in-out font-medium">Tentang Kami</a>
+                    </div>
+                </nav>
+                <button type="button" class="md:hidden p-2 rounded-md text-gray-500 hover:text-primary-indigo hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-primary-indigo" aria-controls="mobile-menu" aria-expanded="false" onclick="toggleMobileMenu()">
+                    <svg class="block h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+                    </svg>
+                </button>
+            </div>
+        </div>
+        <div class="md:hidden hidden" id="mobile-menu">
+            <div class="px-2 pt-2 pb-3 space-y-1 sm:px-3 bg-white border-t">
+                <a href="#beranda" class="nav-link block px-3 py-2 rounded-md text-base font-medium" onclick="showSection('beranda')">Beranda</a>
+                <a href="#mahasiswa" class="nav-link block px-3 py-2 rounded-md text-base font-medium" onclick="showSection('mahasiswa')">Data Mahasiswa</a>
+                <a href="#kegiatan" class="nav-link block px-3 py-2 rounded-md text-base font-medium" onclick="showSection('kegiatan')">Kegiatan Kampus</a>
+                <a href="#tentangkami" class="nav-link block px-3 py-2 rounded-md text-base font-medium" onclick="showSection('tentangkami')">Tentang Kami</a>
+            </div>
         </div>
     </header>
 
-    <main class="container">
-        <div class="card">
-            <h2>Tabel: Tingkat Pengangguran Terbuka (TPT) per Provinsi (%)</h2>
-            
-            <div class="search-wrapper">
-                <input type="text" id="searchInput" placeholder="Cari nama provinsi...">
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
+
+        <div id="beranda" class="section-content">
+             <div class="bg-white p-6 md:p-12 rounded-2xl shadow-2xl border-t-8 border-primary-indigo">
+                <h1 class="text-5xl font-extrabold text-primary-dark mb-4">Portal Data Angkatan Mahasiswa</h1>
+                <p class="text-xl text-gray-600 mb-8">Selamat datang di pusat informasi Angkatan 1 dan Angkatan 2, termasuk data statistik dan kegiatan akademik/non-akademik mereka.</p>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mt-10">
+                    <div class="bg-primary-indigo text-white p-6 rounded-xl shadow-lg transform hover:scale-105 transition duration-300">
+                        <h3 class="text-3xl font-bold mb-2">44</h3>
+                        <p class="text-indigo-200">Total Mahasiswa (A.1 - 2024)</p>
+                    </div>
+                    <div class="bg-primary-dark text-white p-6 rounded-xl shadow-lg transform hover:scale-105 transition duration-300">
+                        <h3 class="text-3xl font-bold mb-2">66</h3>
+                        <p class="text-gray-300">Total Mahasiswa (A.2 - 2025)</p>
+                    </div>
+                    <div class="bg-accent-amber text-gray-900 p-6 rounded-xl shadow-lg transform hover:scale-105 transition duration-300">
+                        <h3 class="text-3xl font-bold mb-2">5+</h3>
+                        <p class="text-amber-800">Organisasi Aktif</p>
+                    </div>
+                </div>
             </div>
-            
-            <div id="data-container">
-                <p id="loading-indicator">Mengambil data dari API BPS...</p>
+        </div>
+
+        <div id="mahasiswa" class="section-content">
+            <div class="bg-white p-6 md:p-10 rounded-2xl shadow-2xl">
+                <h2 class="text-3xl font-bold text-primary-dark mb-6 border-l-4 border-accent-amber pl-3">Statistik dan Profil Angkatan</h2>
+                
+                <div class="flex flex-col md:flex-row justify-between items-center gap-4 mb-8 p-4 bg-gray-50 rounded-lg shadow-inner">
+                    <div class="flex-shrink-0 space-x-2">
+                        <button id="btn-angkatan-2024" onclick="showAngkatan(2024)" class="angkatan-selector-btn bg-gray-200 text-gray-700 font-semibold py-2 px-4 rounded-lg transition duration-300 hover:bg-primary-indigo/80 hover:text-white">
+                            Lihat Angkatan 2024
+                        </button>
+                        <button id="btn-angkatan-2025" onclick="showAngkatan(2025)" class="angkatan-selector-btn bg-gray-200 text-gray-700 font-semibold py-2 px-4 rounded-lg transition duration-300 hover:bg-primary-dark/80 hover:text-white">
+                            Lihat Angkatan 2025
+                        </button>
+                    </div>
+                    <div class="w-full md:w-1/3">
+                        <input type="text" id="mahasiswa-search-input" placeholder="Cari Nama Mahasiswa..." class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-primary-indigo focus:border-primary-indigo">
+                    </div>
+                </div>
+
+                <div id="mahasiswa-placeholder" class="text-center p-10 bg-indigo-50 rounded-lg">
+                    <p class="text-lg text-gray-600">Silakan pilih angkatan (2024 atau 2025) untuk menampilkan data.</p>
+                </div>
+
+
+                <div class="space-y-12">
+                    
+                    <div id="angkatan-2024-content" class="angkatan-content-wrapper">
+                        <h3 class="text-2xl font-bold text-primary-indigo border-b pb-2">Angkatan Pertama (2024/2025)</h3>
+                        <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 mt-6">
+                            
+                            <div class="p-6 rounded-xl shadow-lg border border-primary-indigo/20 lg:col-span-2">
+                                <h4 class="text-xl font-semibold text-primary-dark mb-4">Daftar Mahasiswa (Angkatan 1)</h4>
+                                <div id="angkatan-1-detail-data" class="mt-4">
+                                    <p class="text-center text-gray-500 italic">Memuat data...</p>
+                                </div>
+                                <p class="mt-4 text-xs text-gray-500">Tabel ini dapat di-scroll secara horizontal dan vertikal di perangkat mobile.</p>
+                            </div>
+
+                            <div class="p-6 rounded-xl shadow-lg border border-primary-indigo/20 lg:col-span-2">
+                                <h4 class="text-xl font-semibold text-primary-dark mb-4">Ringkasan Statistik Angkatan 1</h4>
+                                <p class="flex justify-between text-gray-700">Total Mahasiswa: <span id="angkatan-1-count" class="font-bold text-primary-indigo">Memuat...</span></p>
+                                </div>
+                        </div>
+                    </div>
+                    
+                    <div id="angkatan-2025-content" class="angkatan-content-wrapper">
+                        <h3 class="text-2xl font-bold text-primary-dark border-b-2 border-primary-dark/50 pb-2">Angkatan Kedua (2025/2026)</h3>
+                        <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 mt-6">
+                           
+                            <div class="p-6 rounded-xl shadow-lg border border-gray-300 lg:col-span-2">
+                                <h4 class="text-xl font-semibold text-primary-dark mb-4">Daftar Mahasiswa (Angkatan 2)</h4>
+                                <div id="angkatan-2-detail-data" class="mt-4">
+                                    <p class="text-center text-gray-500 italic">Memuat data...</p>
+                                </div>
+                                <p class="mt-4 text-xs text-gray-500">Tabel ini dapat di-scroll secara horizontal dan vertikal di perangkat mobile.</p>
+                            </div>
+
+                            <div class="p-6 rounded-xl shadow-lg border border-gray-300 lg:col-span-2">
+                                <h4 class="text-xl font-semibold text-primary-dark mb-4">Ringkasan Statistik Angkatan 2</h4>
+                                <p class="flex justify-between text-gray-700">Total Mahasiswa: <span id="angkatan-2-count" class="font-bold text-primary-dark">Memuat...</span></p>
+                                </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+        <div id="kegiatan" class="section-content">
+            <div class="bg-white p-6 md:p-10 rounded-2xl shadow-2xl">
+                <h2 class="text-3xl font-bold text-primary-dark mb-6 border-l-4 border-accent-amber pl-3">Kegiatan Akademik & Non-Akademik</h2>
+                <p class="text-gray-600 mb-8">Daftar kegiatan dan pencapaian mahasiswa dari Angkatan 1 dan 2.</p>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                    
+                    <div>
+                        <h3 class="text-2xl font-bold text-primary-indigo mb-4">Kegiatan Akademik</h3>
+                        <div class="space-y-4">
+                            <div class="bg-indigo-50 p-4 rounded-lg shadow-sm border-l-4 border-primary-indigo">
+                                <h4 class="text-lg font-semibold text-primary-dark">Program MBKM Magang Industri</h4>
+                                <p class="text-sm text-gray-700 mt-1">
+                                    <span class="font-medium text-primary-indigo">Angkatan: A.1 & A.2</span> |
+                                    <span class="text-accent-amber">18 Peserta</span> |
+                                    Telah berlangsung (Semester Genap)
+                                </p>
+                            </div>
+                            <div class="bg-indigo-50 p-4 rounded-lg shadow-sm border-l-4 border-primary-indigo">
+                                <h4 class="text-lg font-semibold text-primary-dark">Kuliah Umum oleh Praktisi Data</h4>
+                                <p class="text-sm text-gray-700 mt-1">
+                                    <span class="font-medium text-primary-indigo">Angkatan: Semua</span> |
+                                    <span class="text-accent-amber">Topik: Data Ethics</span> |
+                                    25 Oktober 2025
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div>
+                        <h3 class="text-2xl font-bold text-accent-amber mb-4">Kegiatan Non-Akademik</h3>
+                        <div class="space-y-4">
+                            <div class="bg-amber-50 p-4 rounded-lg shadow-sm border-l-4 border-accent-amber">
+                                <h4 class="text-lg font-semibold text-primary-dark">Latihan Kepemimpinan & Organisasi (LKO)</h4>
+                                <p class="text-sm text-gray-700 mt-1">
+                                    <span class="font-medium text-accent-amber">Angkatan: A.2</span> |
+                                    <span class="text-primary-indigo">Peserta: 60+</span> |
+                                    15-17 November 2025
+                                </p>
+                            </div>
+                            <div class="bg-amber-50 p-4 rounded-lg shadow-sm border-l-4 border-accent-amber">
+                                <h4 class="text-lg font-semibold text-primary-dark">Pekan Olahraga Mahasiswa Data (Pormada)</h4>
+                                <p class="text-sm text-gray-700 mt-1">
+                                    <span class="font-medium text-accent-amber">Angkatan: Semua</span> |
+                                    <span class="text-primary-indigo">Divisi: E-Sport & Futsal</span> |
+                                    Desember 2025
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="tentangkami" class="section-content">
+            <div class="bg-white p-6 md:p-10 rounded-2xl shadow-2xl">
+                <h2 class="text-3xl font-bold text-primary-dark mb-6 border-l-4 border-primary-indigo pl-3">Tentang Kami</h2>
+                <p class="text-xl text-gray-600 mb-8">
+                    Portal ini adalah proyek tim yang dibentuk untuk memenuhi tugas akademik di lingkungan Fakultas Ekonomi & Bisnis Islam, Universitas K.H Abdurrahman Wahid, Pekalongan.
+                </p>
+                <div class="space-y-6">
+                    <div class="border-l-4 border-accent-amber pl-4 p-4 bg-amber-50 rounded-lg shadow-md">
+                        <h3 class="text-xl font-semibold text-accent-amber mb-2">Tujuan Proyek</h3>
+                        <p class="text-gray-800">
+                            Kami adalah sebuah tim yang terdiri dari 4 orang yang dibentuk untuk memenuhi tugas mata kuliah 
+                            <strong class="font-bold text-primary-dark">Statistika Lanjut A</strong>. Portal ini menjadi showcase kemampuan kami dalam pengolahan dan visualisasi data sederhana.
+                        </p>
+                    </div>
+                    <div class="border-l-4 border-primary-indigo pl-4 p-4 bg-indigo-50 rounded-lg shadow-md">
+                        <h3 class="text-xl font-semibold text-primary-indigo mb-2">Institusi</h3>
+                        <p class="text-gray-800">
+                            Program Studi <strong class="font-bold text-primary-dark">Sains Data</strong><br>
+                            Fakultas <strong class="font-bold text-primary-dark">Ekonomi & Bisnis Islam</strong><br>
+                            Universitas <strong class="font-bold text-primary-dark">K.H Abdurrahman Wahid Pekalongan, Jawa Tengah.</strong>
+                        </p>
+                    </div>
+                    <div class="mt-8">
+                        <h3 class="text-2xl font-bold text-primary-dark mb-4 border-b pb-2">Anggota Tim (4 Orang)</h3>
+                        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+                            <div class="p-4 bg-gray-100 rounded-xl shadow-md text-center border-t-4 border-primary-indigo">
+                                <div class="w-12 h-12 bg-primary-indigo rounded-full mx-auto mb-2 flex items-center justify-center text-white font-bold text-lg">1</div>
+                                <p class="font-semibold text-gray-800">Mohammad Rosyiqul Faiq</p>
+                                <p class="text-sm text-gray-500 font-mono italic">60124008</p>
+                            </div>
+                            <div class="p-4 bg-gray-100 rounded-xl shadow-md text-center border-t-4 border-primary-indigo">
+                                <div class="w-12 h-12 bg-primary-indigo rounded-full mx-auto mb-2 flex items-center justify-center text-white font-bold text-lg">2</div>
+                                <p class="font-semibold text-gray-800">Wildan Kharisma Jati</p>
+                                <p class="text-sm text-gray-500 font-mono italic">60124022</p>
+                            </div>
+                            <div class="p-4 bg-gray-100 rounded-xl shadow-md text-center border-t-4 border-primary-indigo">
+                                <div class="w-12 h-12 bg-primary-indigo rounded-full mx-auto mb-2 flex items-center justify-center text-white font-bold text-lg">3</div>
+                                <p class="font-semibold text-gray-800">Muh Dhia Ul Khaq</p>
+                                <p class="text-sm text-gray-500 font-mono italic">60124025</p>
+                            </div>
+                            <div class="p-4 bg-gray-100 rounded-xl shadow-md text-center border-t-4 border-primary-indigo">
+                                <div class="w-12 h-12 bg-primary-indigo rounded-full mx-auto mb-2 flex items-center justify-center text-white font-bold text-lg">4</div>
+                                <p class="font-semibold text-gray-800">Abdul Muhis</p>
+                                <p class="text-sm text-gray-500 font-mono italic">60124030</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </main>
 
-    <footer>
-        <div class="container">
-            <p>&copy; 2025 Proyek Sains Data</p>
-        </div>
+    <footer class="mt-12 py-6 bg-gray-900 text-white text-center text-sm border-t-4 border-accent-amber">
+        <p>&copy; 2025 Proyek Statistika Lanjut A | Sains Data. Desain dimodifikasi dengan Tailwind CSS.</p>
     </footer>
 
-    <script src="script.js"></script>
 </body>
 </html>
